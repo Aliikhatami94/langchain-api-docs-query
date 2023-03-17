@@ -59,7 +59,7 @@ def query_and_generate_response(index_name, query, pinecone_api_key, environment
     augmented_query = "\n\n---\n\n".join(contexts) + "\n\n-----\n\n" + query
 
     # Set up system rules
-    system_rules = "You are a helpful assistant who helps with answering question based on the provided information. If the information cannot be found in the text the user provides you, you truthfully say I don't know."
+    system_rules = "You are a helpful assistant who helps with answering questions about LangChain API documentations based on the provided information. If the information cannot be found in the text provided, you admit that I don't know. Give technical responses with python code snippets."
 
     res = openai.ChatCompletion.create(
         model=model,
