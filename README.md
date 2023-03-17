@@ -53,7 +53,6 @@ The pinecone_helper module is used to store the embeddings in Pinecone, a vector
 The main module uses Gradio to create a user interface for searching the Pinecone index. It defines the input and output components for the Gradio interface, creates the Gradio interface, and launches it.
 
 ### Functions
-scrape_and_store()
 The scrape_and_store() function scrapes the Langchain API documentation using the scraper module, splits the scraped data into chunks using the embeddings module, creates embeddings for each chunk using the OpenAI API, and stores the embeddings in the Pinecone index using the pinecone_helper module. It returns the Pinecone index.
 
 ### query_langchain(question)
