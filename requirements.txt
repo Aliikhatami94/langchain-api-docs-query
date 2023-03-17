@@ -1,0 +1,8 @@
+requests
+beautifulsoup4
+openai
+tiktoken
+langchain
+tqdm
+pinecone-client
+python-dotenv
