@@ -46,22 +46,25 @@ def query_and_generate_response(index_name, api_key, environment, query, model="
     # Connect to the Pinecone index
     index = pinecone.Index(index_name)
 
-    query_embedding = create_embeddings([query], engine)[0]
+    res = openai.Embedding.create(
+        input=[query],
+        engine=engine
+    )
+
+    # Retrieve from Pinecone
+    query_embedding = res['data'][0]['embedding']
     pinecone_results = index.query(query_embedding, top_k=top_k, include_metadata=True)
 
     contexts = [item['metadata']['text'] for item in pinecone_results['matches']]
     augmented_query = "\n\n---\n\n".join(contexts) + "\n\n-----\n\n" + query
 
-    primer = f"""You are Q&A bot. A highly intelligent system that answers
-        user questions based on the information provided by the user above
-        each question. If the information cannot be found in the information
-        provided by the user, you truthfully say "I don't know".
-        """
+    # Set up system rules
+    system_rules = "You are a helpful assistant who helps with answering questions based on the provided information. If the information cannot be found in the text the user provides you, you truthfully say I don't know."
 
     res = openai.ChatCompletion.create(
         model=model,
         messages=[
-            {"role": "system", "content": primer},
+            {"role": "system", "content": system_rules},
             {"role": "user", "content": augmented_query}
         ]
     )
