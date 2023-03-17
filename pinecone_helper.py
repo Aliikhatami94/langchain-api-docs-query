@@ -36,10 +36,10 @@ def store_in_pinecone(chunks, embeddings, index_name):
     return index
 
 
-def query_and_generate_response(index_name, api_key, environment, query, model="gpt-3.5-turbo", engine="text-embedding-ada-002", top_k=5):
+def query_and_generate_response(index_name, query, pinecone_api_key, environment, model="gpt-3.5-turbo", engine="text-embedding-ada-002", top_k=5):
     # Initialize Pinecone
     pinecone.init(
-        api_key=api_key,
+        api_key=pinecone_api_key,
         environment=environment
     )
 
@@ -59,7 +59,7 @@ def query_and_generate_response(index_name, api_key, environment, query, model="
     augmented_query = "\n\n---\n\n".join(contexts) + "\n\n-----\n\n" + query
 
     # Set up system rules
-    system_rules = "You are a helpful assistant who helps with answering questions based on the provided information. If the information cannot be found in the text the user provides you, you truthfully say I don't know."
+    system_rules = "You are a helpful assistant who helps with answering question based on the provided information. If the information cannot be found in the text the user provides you, you truthfully say I don't know."
 
     res = openai.ChatCompletion.create(
         model=model,

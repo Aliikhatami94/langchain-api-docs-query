@@ -1,6 +1,7 @@
 from dotenv import load_dotenv
 import openai
 import os
+from time import sleep
 
 from scraper import scrape_website
 from embeddings import split_text, create_embeddings
@@ -16,8 +17,13 @@ def scrape_and_store(url, domain, index_name):
 
 
 def main(index_name, question):
-    response = query_and_generate_response(index_name, pinecone_api_key, pinecone_environment, question)
-    return response
+    try:
+        response = query_and_generate_response(index_name, question, pinecone_api_key, pinecone_environment)
+        return response
+    except:
+        sleep(5)
+        response = query_and_generate_response(index_name, question, pinecone_api_key, pinecone_environment)
+        return response
 
 
 if __name__ == "__main__":
@@ -25,4 +31,8 @@ if __name__ == "__main__":
     openai.api_key = os.environ['OPENAI_API_KEY']
     pinecone_api_key = os.environ['PINECONE_API_KEY']
     pinecone_environment = os.environ["PINECONE_ENV"]
-    print(main("langchain-docs", "How do I use the ConversationBufferSummaryMemory in code in LangChain and use custom memory to change the history of the memory?"))
+    print("\n")
+    print(main(
+        index_name="langchain-docs",
+        question="How can i create a single prompt task without a conversational chat model?"
+    ))
