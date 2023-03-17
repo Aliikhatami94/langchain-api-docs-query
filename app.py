@@ -42,7 +42,7 @@ def main():
     )
 
     # Launch the Gradio interface
-    iface.launch()
+    return iface
 
 
 if __name__ == "__main__":
